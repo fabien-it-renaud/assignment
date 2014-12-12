@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.TreeSet;
 import java.util.Set;
-import java.util.HashSet;
 import java.util.Collections;
 import java.util.Map;
 import java.util.List;
 
+import java.util.Scanner;
 import java.io.File;
 import java.nio.file.Files;
 import java.io.IOException;
@@ -178,7 +178,10 @@ public class SearchEngine {
     }
 
     
-    public SearchEngine searchDocumentCurrentDirectory(){
+    /**
+     * Interactively searches for tokens in documents in the current directory
+     */
+    public static void searchDocumentCurrentDirectory(){
         List<Document> docs = new ArrayList();
         
         File directory = new File(".");
@@ -197,9 +200,20 @@ public class SearchEngine {
                 }
            }
         }
+        SearchEngine searchEng = new SearchEngine(docs);
         
-        return (new SearchEngine(docs));
-        
+        Scanner sc = new Scanner(System.in);
+        String token;
+        System.out.println("Type the word you are looking for, "
+                + "or return to exit");
+        try {
+            while (sc.hasNextLine() && 
+                !(token = sc.nextLine()).isEmpty()) {
+                System.out.println(searchEng.search(token));
+            }
+        } catch (Exception e) {
+            System.out.println("Something went wrong during the search");
+        } 
     }
     
     
@@ -219,11 +233,13 @@ public class SearchEngine {
         System.out.println(gugul.search("fox"));
     }
     
+    
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         exampleInAssignment();
+        searchDocumentCurrentDirectory();
     }
     
 }
