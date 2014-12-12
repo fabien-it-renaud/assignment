@@ -9,21 +9,24 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.List;
 
-import java.lang.Math;
+import java.io.File;
+import java.nio.file.Files;
+import java.io.IOException;
+
 
 /**
  *
  * @author renaud
  */
 public class SearchEngine {
-    private final Document[] documents;
+    private final List<Document> documents;
     private final int numDocs; // The number of documents in the corpus
 
    
     /* The inverted index maps each token contained in the corpus to the 
     * names of the documents where they appear. Documents are so far unordered.
     */
-    private  Map<String, Set<Document>> invertedIndex;
+    private final Map<String, Set<Document>> invertedIndex;
     
     /* As we will have to go through all the unordered inverted index 
     * to sort it, it is simpler to recreate it ordered
@@ -31,14 +34,16 @@ public class SearchEngine {
     private Map<String, List<Document>> sortedInvertedIndex;
   
     
-    
-    public SearchEngine(Document... documents) {
+    /**
+     * 
+     * @param documents The documents in which the search can be made
+     */
+    public SearchEngine(List<Document> documents) {
         this.documents = documents;
-        this.numDocs = this.documents.length;
+        this.numDocs = this.documents.size();
         this.invertedIndex = new HashMap<>(this.numDocs);
         this.createInvertedIndex();
         this.sort();
-        this.printSortedInvertedIndex();
     }
     
       
@@ -160,16 +165,6 @@ public class SearchEngine {
             return docs;
     }
     
-    // For debugging purposes 
-    private void printInvertedIndex() {
-        for (String token : this.invertedIndex.keySet()) {
-            System.out.print("Token " + token + " appears in documents ");
-            for (Document doc : this.invertedIndex.get(token)) {
-                System.out.print(" " + doc.getName());
-            }
-            System.out.println("");
-        }
-    }
     
     // For debugging purposes 
     private void printSortedInvertedIndex() {
@@ -182,25 +177,53 @@ public class SearchEngine {
         }
     }
 
+    
+    public SearchEngine searchDocumentCurrentDirectory(){
+        List<Document> docs = new ArrayList();
+        
+        File directory = new File(".");
+        File[] fList = directory.listFiles();
+        for (File file : fList) {
+            if (file.isFile()) {
+                byte[] bytes;
+                try {
+                    bytes = Files.readAllBytes(file.toPath());
+                    String content = new String(bytes);
+                    Document d = new Document(content, file.getName());
+                    docs.add(d);
+                } catch (IOException e) {
+                    System.out.println("Impossible to read the file " + 
+                            file.getName());
+                }
+           }
+        }
+        
+        return (new SearchEngine(docs));
+        
+    }
+    
+    
+    public static void exampleInAssignment() {
+        Document d1, d2, d3, d4, d5, d6;
+        d1 = new Document("the brown fox jumped over the brown dog", "one");
+        d2 = new Document("the lazy brown dog sat in the corner", "two");
+        d3 = new Document("the red fox bit the lazy dog", "three");
+        List<Document> docs = new ArrayList();
+        docs.add(d1);
+        docs.add(d2);
+        docs.add(d3);
+        
+        SearchEngine gugul = new SearchEngine(docs);
+        
+        System.out.println(gugul.search("brown"));
+        System.out.println(gugul.search("fox"));
+    }
+    
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Document d1, d2, d3, d4, d5, d6;
-        d1 = new Document("the brown fox jumped over the brown dog");
-        d2 = new Document("the lazy brown dog sat in the corner");
-        d3 = new Document("the red fox bit the lazy dog");
-        d4 = new Document("lazy abc lazy lazy");
-        d5 = new Document("over and over");
-        d6 = new Document("lazy lazy lazy");
-        
-        SearchEngine gugul = new SearchEngine(d1, d2, d3, d4, d5, d6);
-        SearchEngine gogol = new SearchEngine();
-        
-        for (Document d: gugul.search("brown")) {
-            System.out.println(d.getName());
-            
-        }
+        exampleInAssignment();
     }
     
 }
