@@ -14,13 +14,25 @@ public class Document implements Comparable<Document> {
     private final String content;
     private List<String> tokens;
     private static int nbDocuments = 0;
-    private final Integer name;  // TODO: Generalize this
+    private final Integer id;
+    private final String name;
     private HashMap<String, Double> tokensFrequency;
     private final int numberOfTokens;
     
+    public Document(String content, String name) {
+        this.name = name;
+        this.content = content;
+        this.id = nbDocuments;
+        Document.nbDocuments += 1;
+        this.tokenize();
+        this.numberOfTokens = this.tokens.size();
+        this.computeTokensFrequency();
+    }
+    
     public Document(String content) {
         this.content = content;
-        this.name = nbDocuments;
+        this.id = nbDocuments;
+        this.name = String.valueOf(id);
         Document.nbDocuments += 1;
         this.tokenize();
         this.numberOfTokens = this.tokens.size();
@@ -30,7 +42,7 @@ public class Document implements Comparable<Document> {
     @Override
     public int compareTo(Document other) {
         // This has to be a total strict order so operations on Set can work
-        return this.name.compareTo(other.name);
+        return this.id.compareTo(other.id);
     }
     
     private void tokenize() {
@@ -39,7 +51,6 @@ public class Document implements Comparable<Document> {
     
     private void computeTokensFrequency() {
         this.tokensFrequency = new HashMap<>();
-        
         
         for (String token : this.tokens) {
             if (this.tokensFrequency.containsKey(token))
@@ -56,8 +67,17 @@ public class Document implements Comparable<Document> {
         return this.tokens;
     }
     
-    public int getName() {
+    public int getId() {
+        return this.id;
+    }
+    
+    public String getName() {
         return this.name;
+    }
+    
+    @Override
+    public String toString() {
+        return ("Document " + this.name); 
     }
     
     public double getTokenFrequency(String token) {
