@@ -1,14 +1,18 @@
 package searchengine;
 
 import java.util.HashMap;
-        
+import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
+
+
 /**
  *
  * @author renaud
  */
 public class Document implements Comparable<Document> {
     private final String content;
-    private String[] tokens;
+    private List<String> tokens;
     private static int nbDocuments = 0;
     private final Integer name;  // TODO: Generalize this
     private HashMap<String, Double> tokensFrequency;
@@ -19,7 +23,7 @@ public class Document implements Comparable<Document> {
         this.name = nbDocuments;
         Document.nbDocuments += 1;
         this.tokenize();
-        this.numberOfTokens = this.tokens.length;
+        this.numberOfTokens = this.tokens.size();
         this.computeTokensFrequency();
     }
     
@@ -30,29 +34,27 @@ public class Document implements Comparable<Document> {
     }
     
     private void tokenize() {
-        this.tokens = content.split(" ");
+        this.tokens = Arrays.asList(content.split(" "));
     }
     
     private void computeTokensFrequency() {
         this.tokensFrequency = new HashMap<>();
-        for (String token : tokens) {
-            Double n = tokensFrequency.get(token);
-            if (n == null)
-                n = 1.0;
-            else
-                n += 1;
-            tokensFrequency.put(token, n);
-        }
- 
-        for (String token : tokens) {
-            Double n = tokensFrequency.get(token);
-            tokensFrequency.put(token, n/(double)this.numberOfTokens);
+        
+        
+        for (String token : this.tokens) {
+            if (this.tokensFrequency.containsKey(token))
+                break;
+            double nbOccs = Collections.frequency(this.tokens, token);
+            double freq = nbOccs / this.numberOfTokens;
+            tokensFrequency.put(token, freq);
+            System.out.println("For token " + token + " the frequency is " +
+                    freq);
         }
         
         
     }
     
-    public String[] getTokens() {
+    public List<String> getTokens() {
         return this.tokens;
     }
     
@@ -61,6 +63,9 @@ public class Document implements Comparable<Document> {
     }
     
     public double getTokenFrequency(String token) {
-        return this.tokensFrequency.get(token);
+        if (this.tokensFrequency.containsKey(token))
+                return this.tokensFrequency.get(token);
+        else
+            return 0;
     }
 }
