@@ -85,26 +85,16 @@ public class SearchEngine {
         private double computeTfIdf() {
             double termFrequency = this.document.getTokenFrequency(this.token);
             double inverseDocFreq = 1.0;
-            //        Math.log(((double)numDocs) / (1 + numDocsWithToken));
+            /* The idf part does not play any role in the ordering
+                   Math.log(((double)numDocs) / (1 + numDocsWithToken));
+            */
             return termFrequency * inverseDocFreq;
         }
                 
         @Override
         public int compareTo(TokenInDoc other) {
-            System.out.println("Comparing");
-            System.out.println(this.computeTfIdf());
-            System.out.println(other.computeTfIdf());
-            System.out.println("*****");
-            if (this.computeTfIdf() > other.computeTfIdf())
-                return 1;
-            else {
-                if (this.computeTfIdf() < other.computeTfIdf())
-                    return -1;
-                else 
-                    return 0;
-            }
             
-            //return Double.compare(this.computeTfIdf(), other.computeTfIdf());
+            return Double.compare(this.computeTfIdf(), other.computeTfIdf());
         }
             
     }
@@ -141,6 +131,11 @@ public class SearchEngine {
             }
             
             Collections.sort(tokDocList);
+            System.out.println("###############");
+            for (TokenInDoc td : tokDocList) {
+                System.out.println(td.getDocument().getName());
+            }
+            System.out.println("*****************");
             
             List<Document> sortedDocs = new ArrayList();
             this.sortedInvertedIndex.put(token, sortedDocs);
@@ -193,14 +188,15 @@ public class SearchEngine {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Document d1, d2, d3, d4, d5;
+        Document d1, d2, d3, d4, d5, d6;
         d1 = new Document("the brown fox jumped over the brown dog");
         d2 = new Document("the lazy brown dog sat in the corner");
         d3 = new Document("the red fox bit the lazy dog");
-        d4 = new Document("lazy lazy lazy");
+        d4 = new Document("lazy abc lazy lazy");
         d5 = new Document("over and over");
+        d6 = new Document("lazy lazy lazy");
         
-        SearchEngine gugul = new SearchEngine(d1, d2, d3, d4, d5);
+        SearchEngine gugul = new SearchEngine(d1, d2, d3, d4, d5, d6);
         
         for (Document d: gugul.search("brown")) {
             System.out.println(d.getName());
