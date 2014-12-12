@@ -135,14 +135,12 @@ public class SearchEngine {
             }
             
             Collections.sort(tokDocList);
-        
             
             List<Document> sortedDocs = new ArrayList();
             this.sortedInvertedIndex.put(token, sortedDocs);
             for (TokenInDoc tokDoc : tokDocList) {
-                sortedDocs.add(tokDoc.getDocument());
-            }
-            
+                sortedDocs.add(tokDoc.getDocument());                        
+            }          
             
         }
     }
@@ -177,7 +175,7 @@ public class SearchEngine {
     private void printSortedInvertedIndex() {
         for (String token : this.sortedInvertedIndex.keySet()) {
             System.out.print("Token " + token + " appears in documents ");
-            for (Document doc : this.invertedIndex.get(token)) {
+            for (Document doc : this.sortedInvertedIndex.get(token)) {
                 System.out.print(" " + doc.getName());
             }
             System.out.println("");
@@ -197,6 +195,7 @@ public class SearchEngine {
         d6 = new Document("lazy lazy lazy");
         
         SearchEngine gugul = new SearchEngine(d1, d2, d3, d4, d5, d6);
+        SearchEngine gogol = new SearchEngine();
         
         for (Document d: gugul.search("brown")) {
             System.out.println(d.getName());
