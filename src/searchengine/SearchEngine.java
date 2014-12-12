@@ -82,6 +82,10 @@ public class SearchEngine {
             return this.document;
         }
         
+        public String getToken() {
+            return this.token;
+        }
+        
         private double computeTfIdf() {
             double termFrequency = this.document.getTokenFrequency(this.token);
             double inverseDocFreq = 1.0;
@@ -94,7 +98,7 @@ public class SearchEngine {
         @Override
         public int compareTo(TokenInDoc other) {
             
-            return Double.compare(this.computeTfIdf(), other.computeTfIdf());
+            return -Double.compare(this.computeTfIdf(), other.computeTfIdf());
         }
             
     }
@@ -131,11 +135,7 @@ public class SearchEngine {
             }
             
             Collections.sort(tokDocList);
-            System.out.println("###############");
-            for (TokenInDoc td : tokDocList) {
-                System.out.println(td.getDocument().getName());
-            }
-            System.out.println("*****************");
+        
             
             List<Document> sortedDocs = new ArrayList();
             this.sortedInvertedIndex.put(token, sortedDocs);
