@@ -47,8 +47,6 @@ public class Document implements Comparable<Document> {
             double nbOccs = Collections.frequency(this.tokens, token);
             double freq = nbOccs / this.numberOfTokens;
             tokensFrequency.put(token, freq);
-            System.out.println("For token " + token + " the frequency is " +
-                    freq);
         }
         
         
