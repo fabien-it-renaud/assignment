@@ -56,7 +56,7 @@ public class SearchEngine {
                 Set<Document> setOfDocs = this.invertedIndex.get(token);
                  
                 if (setOfDocs == null) {
-                    setOfDocs = new TreeSet();
+                    setOfDocs = new TreeSet<>();
                     this.invertedIndex.put(token, setOfDocs);
                 }
                 
@@ -141,7 +141,7 @@ public class SearchEngine {
             
             Collections.sort(tokDocList);
             
-            List<Document> sortedDocs = new ArrayList();
+            List<Document> sortedDocs = new ArrayList<>();
             this.sortedInvertedIndex.put(token, sortedDocs);
             for (TokenInDoc tokDoc : tokDocList) {
                 sortedDocs.add(tokDoc.getDocument());                        
@@ -182,7 +182,7 @@ public class SearchEngine {
      * Interactively searches for tokens in documents in the current directory
      */
     public static void searchDocumentCurrentDirectory(){
-        List<Document> docs = new ArrayList();
+        List<Document> docs = new ArrayList<>();
         
         File directory = new File(".");
         File[] fList = directory.listFiles();
@@ -222,7 +222,7 @@ public class SearchEngine {
         d1 = new Document("the brown fox jumped over the brown dog", "one");
         d2 = new Document("the lazy brown dog sat in the corner", "two");
         d3 = new Document("the red fox bit the lazy dog", "three");
-        List<Document> docs = new ArrayList();
+        List<Document> docs = new ArrayList<>();
         docs.add(d1);
         docs.add(d2);
         docs.add(d3);
