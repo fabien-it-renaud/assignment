@@ -21,7 +21,7 @@ public class SearchEngineTest {
      */
     @Test
     public void exampleInAssignment() {
-        Document d1, d2, d3, d4, d5, d6;
+        Document d1, d2, d3;
         d1 = new Document("the brown fox jumped over the brown dog", "one");
         d2 = new Document("the lazy brown dog sat in the corner", "two");
         d3 = new Document("the red fox bit the lazy dog", "three");
@@ -41,7 +41,26 @@ public class SearchEngineTest {
         resultFox.add(d3);
         resultFox.add(d1);
         assertTrue(gugul.search("fox").equals(resultFox));
+    }
+    
+    
+    /**
+     * Test searching the empty string
+     */
+    @Test
+    public void testEmptyString() {
+        Document d1, d2, d3;
+        d1 = new Document("the brown fox jumped over the brown dog");
+        d2 = new Document("");
+        d3 = new Document("abc     def");
+        List<Document> docs = new ArrayList<>();
+        docs.add(d1);
+        docs.add(d2);
+        docs.add(d3);
         
+        SearchEngine gugul = new SearchEngine(docs);
         
+        List<Document> resultEmpty = new ArrayList<>();
+        assertTrue(gugul.search("").equals(resultEmpty));
     }
 }

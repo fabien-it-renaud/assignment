@@ -63,6 +63,10 @@ public class SearchEngine {
                 setOfDocs.add(doc);
             }
         }
+        
+        /* It's simpler to remove all the possible empty strings which have
+        been tokenized here */
+        this.invertedIndex.remove("");
     }
     
     /* A pair of a token and the document where it appears with the possibility
@@ -167,7 +171,7 @@ public class SearchEngine {
     
     
     // For debugging purposes 
-    private void printSortedInvertedIndex() {
+    public void printSortedInvertedIndex() {
         for (String token : this.sortedInvertedIndex.keySet()) {
             System.out.print("Token " + token + " appears in documents ");
             for (Document doc : this.sortedInvertedIndex.get(token)) {
