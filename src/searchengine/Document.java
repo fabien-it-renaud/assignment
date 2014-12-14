@@ -2,6 +2,7 @@ package searchengine;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -21,7 +22,7 @@ public class Document implements Comparable<Document> {
     
     public Document(String content, String name) {
         this.name = name;
-        this.content = content;
+        this.content = content.trim();
         this.id = nbDocuments;
         Document.nbDocuments += 1;
         this.tokenize();
@@ -30,7 +31,7 @@ public class Document implements Comparable<Document> {
     }
     
     public Document(String content) {
-        this.content = content;
+        this.content = content.trim();
         this.id = nbDocuments;
         this.name = String.valueOf(id);
         Document.nbDocuments += 1;
@@ -46,7 +47,7 @@ public class Document implements Comparable<Document> {
     }
     
     private void tokenize() {
-        this.tokens = Arrays.asList(content.split(" "));
+        this.tokens = Arrays.asList(content.split(" +"));
     }
     
     private void computeTokensFrequency() {
@@ -59,8 +60,6 @@ public class Document implements Comparable<Document> {
             double freq = nbOccs / this.numberOfTokens;
             tokensFrequency.put(token, freq);
         }
-        
-        
     }
     
     public List<String> getTokens() {

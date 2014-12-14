@@ -64,8 +64,7 @@ public class SearchEngine {
             }
         }
         
-        /* It's simpler to remove all the possible empty strings which have
-        been tokenized here */
+        /* In case of a document was empty */
         this.invertedIndex.remove("");
     }
     
@@ -74,7 +73,7 @@ public class SearchEngine {
     Ultimately this should be replaced by a single comparaison function
     which can handle the current context.
     */
-    private class TokenInDoc implements Comparable<TokenInDoc> {
+    private static class TokenInDoc implements Comparable<TokenInDoc> {
         private final String token;
         private final Document document;
         // The number of documents where the token appears (including
