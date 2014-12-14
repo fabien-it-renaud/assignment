@@ -216,29 +216,10 @@ public class SearchEngine {
         } 
     }
     
-    
-    public static void exampleInAssignment() {
-        Document d1, d2, d3, d4, d5, d6;
-        d1 = new Document("the brown fox jumped over the brown dog", "one");
-        d2 = new Document("the lazy brown dog sat in the corner", "two");
-        d3 = new Document("the red fox bit the lazy dog", "three");
-        List<Document> docs = new ArrayList<>();
-        docs.add(d1);
-        docs.add(d2);
-        docs.add(d3);
-        
-        SearchEngine gugul = new SearchEngine(docs);
-        
-        System.out.println(gugul.search("brown"));
-        System.out.println(gugul.search("fox"));
-    }
-    
-    
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        exampleInAssignment();
         searchDocumentCurrentDirectory();
     }
     
