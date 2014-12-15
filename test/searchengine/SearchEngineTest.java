@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package searchengine;
 
 import java.util.ArrayList;
@@ -10,10 +5,7 @@ import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/**
- *
- * @author renaud
- */
+
 public class SearchEngineTest {
 
     /**
@@ -65,7 +57,7 @@ public class SearchEngineTest {
     }
     
     /**
-     * Test searching the empty string
+     * Test searching a string which is not contained in any document
      */
     @Test
     public void testAbsbsentString() {
