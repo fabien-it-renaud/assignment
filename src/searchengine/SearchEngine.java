@@ -20,12 +20,10 @@ import java.io.IOException;
  * the documents where they appear) is created. It may thus take time
  * to initialize a SearchEngine.
  * Furthermore the documents associated to each token are sorted
- * according to tf-idf statistic (http://en.wikipedia.org/wiki/Tf-idf)
+ * according to term frequency statistic
  */
 public class SearchEngine {
     private final List<Document> documents;
-    private final int numDocs; // The number of documents in the corpus
-
    
     /* The inverted index maps each token contained in the corpus to the 
     * names of the documents where they appear. Documents are so far unordered.
@@ -44,15 +42,14 @@ public class SearchEngine {
      */
     public SearchEngine(List<Document> documents) {
         this.documents = documents;
-        this.numDocs = this.documents.size();
-        this.invertedIndex = new HashMap<>(this.numDocs);
+        this.invertedIndex = new HashMap<>(this.documents.size());
         this.createInvertedIndex();
         this.sort();
     }
     
     /**
      * 
-     * @return the inverted index where documents are sorted according to tf-idf
+     * @return the inverted index where documents are sorted according to tf
      */
     public Map<String, List<Document>> getSortedInvertedIndex() {
         return this.sortedInvertedIndex;
@@ -81,21 +78,17 @@ public class SearchEngine {
     }
     
     /* A pair of a token and the document where it appears with the possibility
-    of being sorted according to tf-idf  
+    of being sorted according to tf
     Ultimately this should be replaced by a single comparaison function
     which can handle the current context.
     */
     private static class TokenInDoc implements Comparable<TokenInDoc> {
         private final String token;
         private final Document document;
-        // The number of documents where the token appears (including
-        // the current one)
-        private final double numDocsWithToken ;
                 
-        public TokenInDoc(String token, Document document, int docsWithToken) {
+        public TokenInDoc(String token, Document document) {
             this.token = token;
             this.document = document;
-            this.numDocsWithToken = (double)docsWithToken;
         }
         
         public Document getDocument() {
@@ -106,26 +99,21 @@ public class SearchEngine {
             return this.token;
         }
         
-        private double computeTfIdf() {
-            double termFrequency = this.document.getTokenFrequency(this.token);
-            double inverseDocFreq = 1.0;
-            /* The idf part does not play any role in the ordering
-                   Math.log(((double)numDocs) / (1 + numDocsWithToken));
-            */
-            return termFrequency * inverseDocFreq;
+        private double computeTf() {
+            return this.document.getTokenFrequency(this.token);
         }
                 
         @Override
         public int compareTo(TokenInDoc other) {
             
-            return -Double.compare(this.computeTfIdf(), other.computeTfIdf());
+            return -Double.compare(this.computeTf(), other.computeTf());
         }
             
     }
     
    /**
     * Sort for each token the documents where the token appears
-    * according to tf-idf. 
+    * according to tf. 
     * All the sorting is done before the first search can
     * be made. It is slow to start but fast afterwards.
     * 
@@ -139,7 +127,7 @@ public class SearchEngine {
            of pairs TokenInDoc (a pair of a token and the document 
            it appears in).
            - Sort this array since TokenInDoc has all the information to compute
-                tf-idf.
+                tf.
            - Remove all the unnecessary tokens so once initialiazed, 
               the inverted index does not take too much space in memory.
         */
@@ -149,9 +137,9 @@ public class SearchEngine {
             List<TokenInDoc> tokDocList = new ArrayList<>();   
             
             Set<Document> setOfDocuments = this.invertedIndex.get(token);
-            int setSize = setOfDocuments.size();
+            
             for (Document doc : setOfDocuments) {
-                tokDocList.add(new TokenInDoc(token, doc, setSize));
+                tokDocList.add(new TokenInDoc(token, doc));
             }
             
             Collections.sort(tokDocList);
@@ -167,12 +155,12 @@ public class SearchEngine {
     
     /**
      * Searches a token within the list of documents and returns the documents
-     * where it appears, ordered by their tf-idf score.
-     * If a token has the same tf-idf in two documents, documents are listed 
+     * where it appears, ordered by their term frequency (tf) score.
+     * If a token has the same tf in two documents, documents are listed 
      * in the order in which they were given to the constructor.
      * 
      * @param token The token we want to search
-     * @return the ordered list of documents, according to tf-idf 
+     * @return the ordered list of documents, according to tf
      *         where the token appears
      */
     public List<Document> search(String token) {
