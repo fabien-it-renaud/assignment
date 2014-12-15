@@ -80,4 +80,32 @@ public class SearchEngineTest {
         assertTrue(gugul.search("single").equals(result));
         
     }
+    
+    @Test
+    public void biggerTest() {
+        Document d1, d2, d3, d4, d5, d6, d7;
+        d1 = new Document("the brown fox jumped over the brown dog while the lazy brown dog sat in the corner", "one");
+        d2 = new Document("brown is a color", "two");
+        d3 = new Document("lazy is a behavior", "three");
+        d4 = new Document("lazy and brown are adjectives which are not often associated", "four");
+        d5 = new Document("if the adjective brown appears in a sentence it is not important", "five");
+        d6 = new Document("dog is an animal", "six");
+        d7 = new Document("a dog eats a fox", "seven");
+        
+        List<Document> docs = Arrays.asList(d1, d2, d3, d4, d5, d6, d7);
+        
+        List<Document> resultBrown = Arrays.asList(d2, d1, d4, d5);
+        /* Notice that even though tf is the same for dog in d6 and d7,
+        documents should appear in this order */
+        List<Document> resultDog = Arrays.asList(d6, d7, d1);
+        List<Document> resultFox = Arrays.asList(d7, d1);
+        
+        SearchEngine gugul = new SearchEngine(docs);  
+        System.out.println(gugul.search("dog"));
+        assertTrue(gugul.search("brown").equals(resultBrown));
+        assertTrue(gugul.search("dog").equals(resultDog));
+        assertTrue(gugul.search("fox").equals(resultFox));
+        
+                
+    }
 }
