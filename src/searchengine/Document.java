@@ -2,6 +2,7 @@ package searchengine;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -70,7 +71,12 @@ public class Document implements Comparable<Document> {
     
     // Simply split words according to spaces between them
     private void tokenize() {
-        this.tokens = Arrays.asList(content.split(" +"));
+        String[] tokensTmp = content.split(" +");
+        // This is consuming a lot of time
+        this.tokens = new ArrayList<>();
+        for (String token : tokensTmp) {
+            this.tokens.add(token.toLowerCase());
+        }
     }
     
     private void computeTokensFrequency() {
@@ -78,11 +84,20 @@ public class Document implements Comparable<Document> {
         
         for (String token : this.tokens) {
             if (this.tokensFrequency.containsKey(token))
-                break;
+                continue;
             double nbOccs = Collections.frequency(this.tokens, token);
             // The division is safe since if we are there is at least one token
             double freq = nbOccs / this.numberOfTokens;
             tokensFrequency.put(token, freq);
+        }
+    }
+    
+    /**
+     * Dumps the frequency table of all tokens
+    */
+    public void printTokensFrequency() {
+        for (String tok : this.tokens) {
+            System.out.println(tok + ": " +  this.getTokenFrequency(tok));
         }
     }
     
@@ -130,7 +145,11 @@ public class Document implements Comparable<Document> {
     public double getTokenFrequency(String token) {
         if (this.tokensFrequency.containsKey(token))
                 return this.tokensFrequency.get(token);
-        else
+        else {
+            System.out.println("the token " + token + " does not exist");
+            System.out.println("!!!!!!!!!!!");
             return 0;
+        }
+            
     }
 }
