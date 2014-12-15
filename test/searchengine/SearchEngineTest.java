@@ -2,7 +2,7 @@ package searchengine;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Arrays;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -19,21 +19,14 @@ public class SearchEngineTest {
         d1 = new Document("the brown fox jumped over the brown dog", "one");
         d2 = new Document("the lazy brown dog sat in the corner", "two");
         d3 = new Document("the red fox bit the lazy dog", "three");
-        List<Document> docs = new ArrayList<>();
-        docs.add(d1);
-        docs.add(d2);
-        docs.add(d3);
+        List<Document> docs = Arrays.asList(d1, d2, d3);
         
         SearchEngine gugul = new SearchEngine(docs);
         
-        List<Document> resultBrown = new ArrayList<>();
-        resultBrown.add(d1);
-        resultBrown.add(d2);
+        List<Document> resultBrown = Arrays.asList(d1, d2);
         assertTrue(gugul.search("brown").equals(resultBrown));
         
-        List<Document> resultFox = new ArrayList<>();
-        resultFox.add(d3);
-        resultFox.add(d1);
+        List<Document> resultFox = Arrays.asList(d3, d1);
         assertTrue(gugul.search("fox").equals(resultFox));
     }
     
@@ -47,10 +40,7 @@ public class SearchEngineTest {
         d1 = new Document("the brown fox jumped over the brown dog");
         d2 = new Document("");
         d3 = new Document("abc     def");
-        List<Document> docs = new ArrayList<>();
-        docs.add(d1);
-        docs.add(d2);
-        docs.add(d3);
+        List<Document> docs = Arrays.asList(d1, d2, d3);
         
         SearchEngine gugul = new SearchEngine(docs);
         
@@ -68,10 +58,7 @@ public class SearchEngineTest {
         d2 = new Document("the lazy brown dog sat in the corner", "two");
         d3 = new Document("the red fox bit the lazy dog", "three");
      
-        List<Document> docs = new ArrayList<>();
-        docs.add(d1);
-        docs.add(d2);
-        docs.add(d3);
+        List<Document> docs = Arrays.asList(d1, d2, d3);
         
         SearchEngine gugul = new SearchEngine(docs);
         
@@ -85,13 +72,9 @@ public class SearchEngineTest {
     @Test
     public void testIndexingSameDocument() {
         Document d = new Document("single document", "one");
-        List<Document> docs = new ArrayList<>();
-        docs.add(d);
-        docs.add(d);
-        docs.add(d);
+        List<Document> docs = Arrays.asList(d, d, d);
         
-        List<Document> result = new ArrayList<>();
-        result.add(d);
+        List<Document> result = Arrays.asList(d);
         
         SearchEngine gugul = new SearchEngine(docs);        
         assertTrue(gugul.search("single").equals(result));
