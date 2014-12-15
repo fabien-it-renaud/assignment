@@ -145,11 +145,7 @@ public class Document implements Comparable<Document> {
     public double getTokenFrequency(String token) {
         if (this.tokensFrequency.containsKey(token))
                 return this.tokensFrequency.get(token);
-        else {
-            System.out.println("the token " + token + " does not exist");
-            System.out.println("!!!!!!!!!!!");
+        else 
             return 0;
-        }
-            
     }
 }
