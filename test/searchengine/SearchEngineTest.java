@@ -2,6 +2,8 @@ package searchengine;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -75,5 +77,24 @@ public class SearchEngineTest {
         
         List<Document> resultEmpty = new ArrayList<>();
         assertTrue(gugul.search("foxbit").equals(resultEmpty));
+    }
+    
+    /*
+    A search engine should not index two times the same document
+    */
+    @Test
+    public void testIndexingSameDocument() {
+        Document d = new Document("single document", "one");
+        List<Document> docs = new ArrayList<>();
+        docs.add(d);
+        docs.add(d);
+        docs.add(d);
+        
+        List<Document> result = new ArrayList<>();
+        result.add(d);
+        
+        SearchEngine gugul = new SearchEngine(docs);        
+        assertTrue(gugul.search("single").equals(result));
+        
     }
 }
