@@ -50,6 +50,14 @@ public class SearchEngine {
         this.sort();
     }
     
+    /**
+     * 
+     * @return the inverted index where documents are sorted according to tf-idf
+     */
+    public Map<String, List<Document>> getSortedInvertedIndex() {
+        return this.sortedInvertedIndex;
+    }
+    
       
     /**
      * Creates the inverted index where documents are unsorted
