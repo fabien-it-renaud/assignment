@@ -77,6 +77,7 @@ public class Document implements Comparable<Document> {
         this.tokensFrequency = new HashMap<>();
         
         for (String token : this.tokens) {
+            token = token.toLowerCase();
             if (this.tokensFrequency.containsKey(token))
                 break;
             double nbOccs = Collections.frequency(this.tokens, token);

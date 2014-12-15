@@ -176,7 +176,7 @@ public class SearchEngine {
      *         where the token appears
      */
     public List<Document> search(String token) {
-        List<Document> docs = this.sortedInvertedIndex.get(token);
+        List<Document> docs = this.sortedInvertedIndex.get(token.toLowerCase());
         if (docs == null) 
             return (new ArrayList<>());
         else
