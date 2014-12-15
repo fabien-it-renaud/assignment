@@ -66,6 +66,23 @@ public class SearchEngineTest {
         assertTrue(gugul.search("foxbit").equals(resultEmpty));
     }
     
+    @Test
+    public void testCaseDoesNotMatter() {
+        Document d1, d2, d3;
+        d1 = new Document("the brown fox jumped over the brown dog", "one");
+        d2 = new Document("the lazy brown dog sat in the corner", "two");
+        d3 = new Document("the red FOX bit the lazy dog", "three");
+        List<Document> docs = Arrays.asList(d1, d2, d3);
+        
+        SearchEngine gugul = new SearchEngine(docs);
+        
+        List<Document> resultBrown = Arrays.asList(d1, d2);
+        assertTrue(gugul.search("BROWN").equals(resultBrown));
+        
+        List<Document> resultFox = Arrays.asList(d3, d1);
+        assertTrue(gugul.search("fox").equals(resultFox));
+    }
+    
     /*
     A search engine should not index two times the same document
     */
@@ -101,7 +118,7 @@ public class SearchEngineTest {
         List<Document> resultFox = Arrays.asList(d7, d1);
         
         SearchEngine gugul = new SearchEngine(docs);  
-        System.out.println(gugul.search("dog"));
+        
         assertTrue(gugul.search("brown").equals(resultBrown));
         assertTrue(gugul.search("dog").equals(resultDog));
         assertTrue(gugul.search("fox").equals(resultFox));
