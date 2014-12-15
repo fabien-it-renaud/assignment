@@ -15,8 +15,12 @@ import java.io.IOException;
 
 
 /**
- *
- * @author renaud
+ * A SearchEngine can search for tokens in a list of documents.
+ * To obtain an efficient search, an inverted index (associating tokens to
+ * the documents where they appear) is created. It may thus take time
+ * to initialize a SearchEngine.
+ * Furthermore the documents associated to each token are sorted
+ * according to tf-idf statistic (http://en.wikipedia.org/wiki/Tf-idf)
  */
 public class SearchEngine {
     private final List<Document> documents;
@@ -154,7 +158,10 @@ public class SearchEngine {
     }
     
     /**
-     * Searches a token within the list of documents
+     * Searches a token within the list of documents and returns the documents
+     * where it appears, ordered by their tf-idf score.
+     * If a token has the same tf-idf in two documents, documents are listed 
+     * in the order in which they were given to the constructor.
      * 
      * @param token The token we want to search
      * @return the ordered list of documents, according to tf-idf 
@@ -169,7 +176,9 @@ public class SearchEngine {
     }
     
     
-    // For debugging purposes 
+    /**
+     * Dump of the entire sorted inverted index
+     */ 
     public void printSortedInvertedIndex() {
         for (String token : this.sortedInvertedIndex.keySet()) {
             System.out.print("Token " + token + " appears in documents ");
