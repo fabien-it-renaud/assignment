@@ -177,10 +177,11 @@ public class SearchEngine {
      */
     public List<Document> search(String token) {
         List<Document> docs = this.sortedInvertedIndex.get(token.toLowerCase());
-        if (docs == null) 
+        if (docs == null) {
             return (new ArrayList<>());
-        else
+        } else {
             return docs;
+        }
     }
     
     

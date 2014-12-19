@@ -3,7 +3,6 @@ package searchengine;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 
@@ -83,8 +82,9 @@ public class Document implements Comparable<Document> {
         this.tokensFrequency = new HashMap<>();
         
         for (String token : this.tokens) {
-            if (this.tokensFrequency.containsKey(token))
+            if (this.tokensFrequency.containsKey(token)) {
                 continue;
+            }
             double nbOccs = Collections.frequency(this.tokens, token);
             // The division is safe since if we are there is at least one token
             double freq = nbOccs / this.numberOfTokens;
@@ -143,9 +143,10 @@ public class Document implements Comparable<Document> {
      * the total length of the document
      */
     public double getTokenFrequency(String token) {
-        if (this.tokensFrequency.containsKey(token))
+        if (this.tokensFrequency.containsKey(token)) {
                 return this.tokensFrequency.get(token);
-        else 
+        } else {
             return 0;
+        }
     }
 }
