@@ -82,15 +82,6 @@ public class Document implements Comparable<Document> {
     }
     
     /**
-     * Dumps the frequency table of all tokens
-    */
-    public void printTokensFrequency() {
-        for (String tok : this.tokens) {
-            System.out.println(tok + ": " +  this.getTokenFrequency(tok));
-        }
-    }
-    
-    /**
      * 
      * @return The list of tokens in the document i.e. all the words
      * (duplicate are __not__removed)
