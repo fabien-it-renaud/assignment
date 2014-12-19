@@ -1,9 +1,7 @@
 package searchengine;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Collections;
 
 
 /**
@@ -15,11 +13,11 @@ import java.util.Collections;
  */
 public class Document implements Comparable<Document> {
     private final String content;
-    private List<String> tokens;
+    private final List<String> tokens;
     private static int nbDocuments = 0;
     private final Integer id;
     private final String name;
-    private HashMap<String, Double> tokensFrequency;
+    private Map<String, Double> tokensFrequency;
     private final int numberOfTokens;
     
     /**
@@ -34,7 +32,8 @@ public class Document implements Comparable<Document> {
         Document.nbDocuments += 1;
         this.tokens = DocumentTokenizer.tokenize(this.content);
         this.numberOfTokens = this.tokens.size();
-        this.computeTokensFrequency();
+        this.tokensFrequency = 
+            DocumentStatistics.computeTokensFrequency(tokens, numberOfTokens);
     }
     
     /**
@@ -49,7 +48,8 @@ public class Document implements Comparable<Document> {
         Document.nbDocuments += 1;
         this.tokens = DocumentTokenizer.tokenize(this.content);
         this.numberOfTokens = this.tokens.size();
-        this.computeTokensFrequency();
+        this.tokensFrequency = 
+            DocumentStatistics.computeTokensFrequency(tokens, numberOfTokens);
     }
     
     /**
@@ -67,20 +67,6 @@ public class Document implements Comparable<Document> {
         return this.id.compareTo(other.id);
     }
     
-    private void computeTokensFrequency() {
-        this.tokensFrequency = new HashMap<>();
-        
-        for (String token : this.tokens) {
-            if (this.tokensFrequency.containsKey(token)) {
-                continue;
-            }
-            double nbOccs = Collections.frequency(this.tokens, token);
-            // The division is safe since if we are there is at least one token
-            double freq = nbOccs / this.numberOfTokens;
-            tokensFrequency.put(token, freq);
-        }
-    }
-    
     /**
      * 
      * @return The list of tokens in the document i.e. all the words
@@ -89,6 +75,7 @@ public class Document implements Comparable<Document> {
     public List<String> getTokens() {
         return this.tokens;
     }
+    
      /**
      * 
      * @return The whole content of the document, as a string
@@ -96,8 +83,6 @@ public class Document implements Comparable<Document> {
     public String getContent() {
         return this.content;
     }
-    
-    
     
     /**
      * 
