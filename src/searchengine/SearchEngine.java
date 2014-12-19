@@ -187,15 +187,23 @@ public class SearchEngine {
     
     /**
      * Dump of the entire sorted inverted index
+     * 
+     * @return the sorted inverted index, as a string
      */ 
-    public void printSortedInvertedIndex() {
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        String NEW_LINE = System.getProperty("line.separator");
+        
         for (String token : this.sortedInvertedIndex.keySet()) {
-            System.out.print("Token " + token + " appears in documents ");
+            result.append("Token " + token + " appears in documents:");
             for (Document doc : this.sortedInvertedIndex.get(token)) {
-                System.out.print(" " + doc.getName());
+                result.append(" "+ doc.getName());
             }
-            System.out.println("");
+            result.append(NEW_LINE);
         }
+        
+        return result.toString();
     }
 
     
