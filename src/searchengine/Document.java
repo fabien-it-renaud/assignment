@@ -32,7 +32,7 @@ public class Document implements Comparable<Document> {
         this.content = content.trim();
         this.id = nbDocuments;
         Document.nbDocuments += 1;
-        this.tokenize();
+        this.tokens = DocumentTokenizer.tokenize(this.content);
         this.numberOfTokens = this.tokens.size();
         this.computeTokensFrequency();
     }
@@ -47,7 +47,7 @@ public class Document implements Comparable<Document> {
         this.id = nbDocuments;
         this.name = String.valueOf(id);
         Document.nbDocuments += 1;
-        this.tokenize();
+        this.tokens = DocumentTokenizer.tokenize(this.content);
         this.numberOfTokens = this.tokens.size();
         this.computeTokensFrequency();
     }
@@ -65,17 +65,6 @@ public class Document implements Comparable<Document> {
     public int compareTo(Document other) {
         // This has to be a total strict order so operations on Set can work
         return this.id.compareTo(other.id);
-    }
-    
-    
-    // Simply split words according to spaces between them
-    private void tokenize() {
-        String[] tokensTmp = content.split(" +");
-        // This is consuming a lot of time
-        this.tokens = new ArrayList<>();
-        for (String token : tokensTmp) {
-            this.tokens.add(token.toLowerCase());
-        }
     }
     
     private void computeTokensFrequency() {
@@ -109,6 +98,15 @@ public class Document implements Comparable<Document> {
     public List<String> getTokens() {
         return this.tokens;
     }
+     /**
+     * 
+     * @return The whole content of the document, as a string
+     */
+    public String getContent() {
+        return this.content;
+    }
+    
+    
     
     /**
      * 
