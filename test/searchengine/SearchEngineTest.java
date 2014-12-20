@@ -43,7 +43,6 @@ public class SearchEngineTest {
         List<Document> docs = Arrays.asList(d1, d2, d3);
         
         SearchEngine gugul = new SearchEngine(docs);
-        
         List<Document> resultEmpty = new ArrayList<>();
         assertTrue(gugul.search("").equals(resultEmpty));
     }

@@ -13,11 +13,11 @@ import java.util.List;
  */
 public class Document implements Comparable<Document> {
     private final String content;
-    private final List<String> tokens;
+    private final List<Token> tokens;
     private static int nbDocuments = 0;
     private final Integer id;
     private final String name;
-    private final Map<String, Double> tokensFrequency;
+    private final Map<Token, Double> tokensFrequency;
     
     /**
      * 
@@ -29,7 +29,8 @@ public class Document implements Comparable<Document> {
         this.content = content.trim();
         this.id = nbDocuments;
         Document.nbDocuments += 1;
-        this.tokens = DocumentTokenizer.tokenize(this.content);
+        DocumentTokenizer docTok = new DocumentTokenizerSimple();
+        this.tokens = docTok.tokenize(this);
         this.tokensFrequency = 
                 DocumentStatistics.computeTokensFrequency(tokens);
     }
@@ -44,7 +45,8 @@ public class Document implements Comparable<Document> {
         this.id = nbDocuments;
         this.name = String.valueOf(id);
         Document.nbDocuments += 1;
-        this.tokens = DocumentTokenizer.tokenize(this.content);
+        DocumentTokenizer docTok = new DocumentTokenizerSimple();
+        this.tokens = docTok.tokenize(this);
         this.tokensFrequency = 
             DocumentStatistics.computeTokensFrequency(tokens);
     }
@@ -69,7 +71,7 @@ public class Document implements Comparable<Document> {
      * @return The list of tokens in the document i.e. all the words
      * (duplicate are __not__removed)
      */
-    public List<String> getTokens() {
+    public List<Token> getTokens() {
         return this.tokens;
     }
     
@@ -113,7 +115,7 @@ public class Document implements Comparable<Document> {
      * the number of occurrences of the token in the document divided by
      * the total length of the document
      */
-    public double getTokenFrequency(String token) {
+    public double getTokenFrequency(Token token) {
         if (this.tokensFrequency.containsKey(token)) {
                 return this.tokensFrequency.get(token);
         } else {

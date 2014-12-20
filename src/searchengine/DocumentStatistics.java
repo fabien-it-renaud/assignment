@@ -16,11 +16,11 @@ public class DocumentStatistics {
      * @param tokens the tokenized content of the document
      * @return       a map associating to each token its frequency
      */
-    public static Map<String, Double> 
-      computeTokensFrequency(List<String> tokens) {
-        Map<String, Double> tokensFrequency = new HashMap<>();
+    public static Map<Token, Double> 
+      computeTokensFrequency(List<Token> tokens) {
+        Map<Token, Double> tokensFrequency = new HashMap<>();
         
-        for (String token : tokens) {
+        for (Token token : tokens) {
             if (tokensFrequency.containsKey(token)) {
                 continue;
             }

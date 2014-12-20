@@ -27,12 +27,12 @@ public class SearchEngine {
     /* The inverted index maps each token contained in the corpus to the 
     * names of the documents where they appear. Documents are so far unordered.
     */
-    private final Map<String, Set<Document>> invertedIndex;
+    private final Map<Token, Set<Document>> invertedIndex;
     
     /* As we will have to go through all the unordered inverted index 
     * to sort it, it is simpler to recreate it ordered
     */
-    private Map<String, List<Document>> sortedInvertedIndex;
+    private Map<Token, List<Document>> sortedInvertedIndex;
   
     
     /**
@@ -51,7 +51,7 @@ public class SearchEngine {
      * 
      * @return the inverted index where documents are sorted according to tf-idf
      */
-    public Map<String, List<Document>> getSortedInvertedIndex() {
+    public Map<Token, List<Document>> getSortedInvertedIndex() {
         return this.sortedInvertedIndex;
     }
     
@@ -61,7 +61,7 @@ public class SearchEngine {
      */
     private void createInvertedIndex() {
         for (Document doc : this.documents) {
-            for (String token : doc.getTokens()) {
+            for (Token token : doc.getTokens()) {
                 Set<Document> setOfDocs = this.invertedIndex.get(token);
                  
                 if (setOfDocs == null) {
@@ -83,13 +83,13 @@ public class SearchEngine {
     which can handle the current context.
     */
     private static class TokenInDoc implements Comparable<TokenInDoc> {
-        private final String token;
+        private final Token token;
         private final Document document;
         // The number of documents where the token appears (including
         // the current one)
-        private final double numDocsWithToken ;
+        private final double numDocsWithToken;
                 
-        public TokenInDoc(String token, Document document, int docsWithToken) {
+        public TokenInDoc(Token token, Document document, int docsWithToken) {
             this.token = token;
             this.document = document;
             this.numDocsWithToken = (double)docsWithToken;
@@ -99,7 +99,7 @@ public class SearchEngine {
             return this.document;
         }
         
-        public String getToken() {
+        public Token getToken() {
             return this.token;
         }
         
@@ -142,7 +142,7 @@ public class SearchEngine {
         */
         this.sortedInvertedIndex = new HashMap<>();
         
-        for (String token : this.invertedIndex.keySet()) {
+        for (Token token : this.invertedIndex.keySet()) {
             List<TokenInDoc> tokDocList = new ArrayList<>();   
             
             Set<Document> setOfDocuments = this.invertedIndex.get(token);
@@ -173,7 +173,8 @@ public class SearchEngine {
      *         where the token appears
      */
     public List<Document> search(String token) {
-        List<Document> docs = this.sortedInvertedIndex.get(token.toLowerCase());
+        Token tok = new TokenSimple(token.toLowerCase());
+        List<Document> docs = this.sortedInvertedIndex.get(tok);
         if (docs == null) {
             return Collections.EMPTY_LIST;
         } else {
@@ -194,9 +195,9 @@ public class SearchEngine {
         StringBuilder result = new StringBuilder();
         String NEW_LINE = System.getProperty("line.separator");
         
-        result.append(this.numDocs + " documents indexed");
+        result.append(this.numDocs + " documents indexed" + NEW_LINE);
         
-        for (String token : this.sortedInvertedIndex.keySet()) {
+        for (Token token : this.sortedInvertedIndex.keySet()) {
             result.append("Token " + token + " appears in documents:");
             for (Document doc : this.sortedInvertedIndex.get(token)) {
                 result.append(" "+ doc.getName());
