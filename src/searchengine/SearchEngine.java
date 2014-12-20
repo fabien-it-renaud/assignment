@@ -9,9 +9,6 @@ import java.util.Map;
 import java.util.List;
 
 import java.util.Scanner;
-import java.io.File;
-import java.nio.file.Files;
-import java.io.IOException;
 
 
 /**
@@ -178,7 +175,7 @@ public class SearchEngine {
     public List<Document> search(String token) {
         List<Document> docs = this.sortedInvertedIndex.get(token.toLowerCase());
         if (docs == null) {
-            return (new ArrayList<>());
+            return Collections.EMPTY_LIST;
         } else {
             return docs;
         }
@@ -186,14 +183,18 @@ public class SearchEngine {
     
     
     /**
-     * Dump of the entire sorted inverted index
+     * Gives a simple presentation of the search engine that is: the number 
+     * of documents indexed as well as the different occurrences of each token
+     * in the corresponding documents
      * 
-     * @return the sorted inverted index, as a string
+     * @return a presentation of the search engine
      */ 
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
         String NEW_LINE = System.getProperty("line.separator");
+        
+        result.append(this.numDocs + " documents indexed");
         
         for (String token : this.sortedInvertedIndex.keySet()) {
             result.append("Token " + token + " appears in documents:");
@@ -226,7 +227,7 @@ public class SearchEngine {
                 System.out.println(searchEng.search(token));
             }
         } catch (Exception e) {
-            System.out.println("Something went wrong during the search");
+            System.err.println("Something went wrong during the search");
         } 
     }
     
