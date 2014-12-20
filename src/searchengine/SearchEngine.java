@@ -209,26 +209,11 @@ public class SearchEngine {
     
     /**
      * Interactively searches for tokens in documents in the current directory
+     * 
+     * @param directory
      */
-    public static void searchDocumentCurrentDirectory(){
-        List<Document> docs = new ArrayList<>();
-        
-        File directory = new File(".");
-        File[] fList = directory.listFiles();
-        for (File file : fList) {
-            if (file.isFile()) {
-                byte[] bytes;
-                try {
-                    bytes = Files.readAllBytes(file.toPath());
-                    String content = new String(bytes);
-                    Document d = new Document(content, file.getName());
-                    docs.add(d);
-                } catch (IOException e) {
-                    System.out.println("Impossible to read the file " + 
-                            file.getName());
-                }
-           }
-        }
+    public static void searchInDirectory(String directory) {
+        List<Document> docs = DocumentBuilder.buildFromDirectory(directory);
         SearchEngine searchEng = new SearchEngine(docs);
         
         Scanner sc = new Scanner(System.in);
@@ -249,7 +234,7 @@ public class SearchEngine {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        searchDocumentCurrentDirectory();
+        searchInDirectory(".");
     }
     
 }
