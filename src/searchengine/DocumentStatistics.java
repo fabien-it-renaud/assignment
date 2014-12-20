@@ -14,11 +14,10 @@ public class DocumentStatistics {
     /**
      * 
      * @param tokens the tokenized content of the document
-     * @param size   the number of tokens
      * @return       a map associating to each token its frequency
      */
     public static Map<String, Double> 
-      computeTokensFrequency(List<String> tokens, int size) {
+      computeTokensFrequency(List<String> tokens) {
         Map<String, Double> tokensFrequency = new HashMap<>();
         
         for (String token : tokens) {
@@ -27,7 +26,7 @@ public class DocumentStatistics {
             }
             double nbOccs = Collections.frequency(tokens, token);
             // The division is safe since if we are there is at least one token
-            double freq = nbOccs / size;
+            double freq = nbOccs / tokens.size();
             tokensFrequency.put(token, freq);
         }
         

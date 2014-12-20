@@ -17,8 +17,7 @@ public class Document implements Comparable<Document> {
     private static int nbDocuments = 0;
     private final Integer id;
     private final String name;
-    private Map<String, Double> tokensFrequency;
-    private final int numberOfTokens;
+    private final Map<String, Double> tokensFrequency;
     
     /**
      * 
@@ -31,9 +30,8 @@ public class Document implements Comparable<Document> {
         this.id = nbDocuments;
         Document.nbDocuments += 1;
         this.tokens = DocumentTokenizer.tokenize(this.content);
-        this.numberOfTokens = this.tokens.size();
         this.tokensFrequency = 
-            DocumentStatistics.computeTokensFrequency(tokens, numberOfTokens);
+                DocumentStatistics.computeTokensFrequency(tokens);
     }
     
     /**
@@ -47,9 +45,8 @@ public class Document implements Comparable<Document> {
         this.name = String.valueOf(id);
         Document.nbDocuments += 1;
         this.tokens = DocumentTokenizer.tokenize(this.content);
-        this.numberOfTokens = this.tokens.size();
         this.tokensFrequency = 
-            DocumentStatistics.computeTokensFrequency(tokens, numberOfTokens);
+            DocumentStatistics.computeTokensFrequency(tokens);
     }
     
     /**
