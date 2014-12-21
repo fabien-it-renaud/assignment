@@ -22,6 +22,7 @@ import java.util.Scanner;
 public class SearchEngine {
     private final List<Document> documents;
     private final int numDocs; // The number of documents in the corpus
+    private final DocumentTokenizer docTok;
 
    
     /* The inverted index maps each token contained in the corpus to the 
@@ -38,9 +39,11 @@ public class SearchEngine {
     /**
      * 
      * @param documents The documents in which the search can be made
+     * @param docTok Specifies how the documents are tokenized
      */
-    public SearchEngine(List<Document> documents) {
+    public SearchEngine(List<Document> documents, DocumentTokenizer docTok) {
         this.documents = documents;
+        this.docTok = docTok;
         this.numDocs = this.documents.size();
         this.invertedIndex = new HashMap<>(this.numDocs);
         this.createInvertedIndex();
@@ -61,6 +64,7 @@ public class SearchEngine {
      */
     private void createInvertedIndex() {
         for (Document doc : this.documents) {
+            doc.tokenize(this.docTok);
             for (Token token : doc.getTokens()) {
                 Set<Document> setOfDocs = this.invertedIndex.get(token);
                  
@@ -73,8 +77,12 @@ public class SearchEngine {
             }
         }
         
-        /* In case of a document was empty */
-        this.invertedIndex.remove("");
+        /* In case of a document was empty 
+        The fact that we are using a simple token should be taken in the
+        search engine constructor
+        */
+        Token emptyTok = new TokenSimple("");
+        this.invertedIndex.remove(emptyTok);
     }
     
     /* A pair of a token and the document where it appears with the possibility
@@ -213,10 +221,14 @@ public class SearchEngine {
      * Interactively searches for tokens in documents in the current directory
      * 
      * @param directory
+     * @param docTok
      */
-    public static void searchInDirectory(String directory) {
-        List<Document> docs = DocumentBuilder.buildFromDirectory(directory);
-        SearchEngine searchEng = new SearchEngine(docs);
+    public static void 
+      searchInDirectory(String directory, DocumentTokenizer docTok) {
+        DocumentBuilder docBuild = new DocumentBuilder(docTok);
+        List<Document> docs = 
+                docBuild.buildFromDirectory(directory);
+        SearchEngine searchEng = new SearchEngine(docs, docTok);
         
         Scanner sc = new Scanner(System.in);
         String token;
@@ -236,7 +248,7 @@ public class SearchEngine {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        searchInDirectory(".");
+        searchInDirectory(".", new DocumentTokenizerSimple());
     }
     
 }

@@ -8,6 +8,11 @@ import java.util.List;
 
 
 public class DocumentBuilder {
+    private DocumentTokenizer docTok;
+    
+    public DocumentBuilder(DocumentTokenizer docTok) {
+        this.docTok = docTok;
+    }
     
     private static File[] listAllFiles(File directory) {
         File [] emptyDir = {};
@@ -23,7 +28,8 @@ public class DocumentBuilder {
         }
     }
     
-    public static List<Document> buildFromDirectory(String dir) {
+    public List<Document> 
+        buildFromDirectory(String dir) {
         File directory = new File(dir);
         List<Document> docs = new ArrayList<>();
         
@@ -34,7 +40,9 @@ public class DocumentBuilder {
                 try {
                     bytes = Files.readAllBytes(file.toPath());
                     String content = new String(bytes);
-                    Document d = new Document(content, file.getName());
+                    Document d = 
+                            new Document(content, file.getName());
+                    d.tokenize(this.docTok);
                     docs.add(d);
                 } catch (IOException e) {
                     System.err.println("Impossible to read the file " + 
@@ -44,6 +52,10 @@ public class DocumentBuilder {
         }
         
         return docs;
+    }
+        
+    public void setDocumentTokenizer(DocumentTokenizer docTok) {
+        this.docTok = docTok;
     }
     
 }

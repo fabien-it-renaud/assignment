@@ -1,23 +1,23 @@
 package searchengine;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.List;
 
 
 /**
- * A Document is simply a string of words without any punctuation.
- * The content is simply tokenized with spaces as delimiters.
+ * A Document is simply a list of words.
  * 
  * The maximal size of a document is Integer.MAX_VALUE
  * 
  */
 public class Document implements Comparable<Document> {
     private final String content;
-    private final List<Token> tokens;
+    private List<Token> tokens;
     private static int nbDocuments = 0;
     private final Integer id;
     private final String name;
-    private final Map<Token, Double> tokensFrequency;
+    private Map<Token, Double> tokensFrequency;
     
     /**
      * 
@@ -25,14 +25,12 @@ public class Document implements Comparable<Document> {
      * @param name the name of the document
      */
     public Document(String content, String name) {
-        this.name = name;
         this.content = content.trim();
         this.id = nbDocuments;
+        this.name = name;
+        this.tokens = Collections.EMPTY_LIST;
         Document.nbDocuments += 1;
-        DocumentTokenizer docTok = new DocumentTokenizerSimple();
-        this.tokens = docTok.tokenize(this);
-        this.tokensFrequency = 
-                DocumentStatistics.computeTokensFrequency(tokens);
+        this.tokensFrequency = Collections.EMPTY_MAP;
     }
     
     /**
@@ -44,11 +42,15 @@ public class Document implements Comparable<Document> {
         this.content = content.trim();
         this.id = nbDocuments;
         this.name = String.valueOf(id);
+        this.tokens = Collections.EMPTY_LIST;
         Document.nbDocuments += 1;
-        DocumentTokenizer docTok = new DocumentTokenizerSimple();
+        this.tokensFrequency = Collections.EMPTY_MAP;
+    }
+    
+    public void tokenize(DocumentTokenizer docTok) {
         this.tokens = docTok.tokenize(this);
         this.tokensFrequency = 
-            DocumentStatistics.computeTokensFrequency(tokens);
+                DocumentStatistics.computeTokensFrequency(tokens);
     }
     
     /**

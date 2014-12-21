@@ -20,8 +20,9 @@ public class SearchEngineTest {
         d2 = new Document("the lazy brown dog sat in the corner", "two");
         d3 = new Document("the red fox bit the lazy dog", "three");
         List<Document> docs = Arrays.asList(d1, d2, d3);
-        
-        SearchEngine gugul = new SearchEngine(docs);
+       
+        SearchEngine gugul = 
+                new SearchEngine(docs, new DocumentTokenizerSimple());
         
         List<Document> resultBrown = Arrays.asList(d1, d2);
         assertTrue(gugul.search("brown").equals(resultBrown));
@@ -42,7 +43,8 @@ public class SearchEngineTest {
         d3 = new Document("abc     def");
         List<Document> docs = Arrays.asList(d1, d2, d3);
         
-        SearchEngine gugul = new SearchEngine(docs);
+        SearchEngine gugul = 
+                new SearchEngine(docs, new DocumentTokenizerSimple());
         List<Document> resultEmpty = new ArrayList<>();
         assertTrue(gugul.search("").equals(resultEmpty));
     }
@@ -59,7 +61,8 @@ public class SearchEngineTest {
      
         List<Document> docs = Arrays.asList(d1, d2, d3);
         
-        SearchEngine gugul = new SearchEngine(docs);
+        SearchEngine gugul = 
+                new SearchEngine(docs, new DocumentTokenizerSimple());
         
         List<Document> resultEmpty = new ArrayList<>();
         assertTrue(gugul.search("foxbit").equals(resultEmpty));
@@ -73,7 +76,8 @@ public class SearchEngineTest {
         d3 = new Document("the red FOX bit the lazy dog", "three");
         List<Document> docs = Arrays.asList(d1, d2, d3);
         
-        SearchEngine gugul = new SearchEngine(docs);
+        SearchEngine gugul = 
+                new SearchEngine(docs, new DocumentTokenizerSimple());
         
         List<Document> resultBrown = Arrays.asList(d1, d2);
         assertTrue(gugul.search("BROWN").equals(resultBrown));
@@ -92,7 +96,8 @@ public class SearchEngineTest {
         
         List<Document> result = Arrays.asList(d);
         
-        SearchEngine gugul = new SearchEngine(docs);        
+        SearchEngine gugul = 
+                new SearchEngine(docs, new DocumentTokenizerSimple());
         assertTrue(gugul.search("single").equals(result));
         
     }
@@ -116,12 +121,11 @@ public class SearchEngineTest {
         List<Document> resultDog = Arrays.asList(d6, d7, d1);
         List<Document> resultFox = Arrays.asList(d7, d1);
         
-        SearchEngine gugul = new SearchEngine(docs);  
+        SearchEngine gugul = 
+                new SearchEngine(docs, new DocumentTokenizerSimple());
         
         assertTrue(gugul.search("brown").equals(resultBrown));
         assertTrue(gugul.search("dog").equals(resultDog));
         assertTrue(gugul.search("fox").equals(resultFox));
-        
-                
     }
 }
