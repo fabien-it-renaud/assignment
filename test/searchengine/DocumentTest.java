@@ -8,22 +8,24 @@ import java.util.List;
 
 public class DocumentTest {
     
+    private boolean noEmptyString(Document doc) {
+        List<Token> tokens = doc.getTokens();
+        for (Token tok : tokens) {
+            String content = tok.getContent();
+            if (content.equals("")) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
     @Test
     public void testGetTokensEmptyString() {
         Document d1 = new Document(" abc    def     ghi  ");
         Document d2 = new Document("");
 
-        List<Token> tokensDoc1 = d1.getTokens();
-        for (Token tok : tokensDoc1) {
-            String content = tok.getContent();
-            assertFalse(content.equals(""));
-        }
-        
-        List<Token> tokensDoc2 = d2.getTokens();
-        for (Token tok : tokensDoc2) {
-            String content = tok.getContent();
-            assertFalse(content.equals(""));
-        }
+        assertTrue(noEmptyString(d1));
+        assertTrue(noEmptyString(d2));
     }
-    
 }
